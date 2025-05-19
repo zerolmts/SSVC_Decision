@@ -43,13 +43,15 @@ function Get-SSVCDecision {
 
     $logger = [treewrite]::new()
 
+    # Set the most common values for each decision point in case bad data was passed.
+    # For example: Most vulns aren't exploitable, most don't have poc code, those that do are usually partial, and most companys have more support or minimal hardware than crown jewels.
     if (@("Active","poc","none") -notcontains $Exploitation) {if ($logging) {$logger.print("replaced exploitation")}; $exploitation = $none}
     if (@("yes","no") -notcontains $Automatable) {if ($logging) {$logger.print("replaced automatable")};$Automatable = "no"}
     if (@("partial","total") -notcontains $TechnicalImpact) {if ($logging) {$logger.print("replaced technical impact")};$TechnicalImpact = "partial"}
     if (@("minimal","support","essential") -notcontains $Mission) {if ($logging) {$logger.print("replaced mission")};$Mission = "support"}
     if (@("minimal","material","irreversible") -notcontains $WellBeing) {if ($logging) {$logger.print("replaced wellbeing")};$WellBeing = "material"}
 
-
+    # Took a more careful approach than CISA here, simply because, while the government can say "Attend" on some things that might end people, most businesses can't...
     switch ($Exploitation) {
         "active" {if ($logging) {$logger.print($switch.current)};
             switch ($Automatable) {
